@@ -1,0 +1,58 @@
+[
+  {
+    "title": "Amber Horizon",
+    "description": "Square frame made with premium Acetate material. Stylish sunglasses for daily wear.",
+    "brand": "Emaan Optiko",
+    "colors": "Tortoise Brown",
+    "sizes": [],
+    "category": "Glasses",
+    "price": 260,
+    "stock": 10,
+    "images": [
+      "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcSo769f7kUkaQic1Fx0s0hiS9OwYS0F8vqTCCJU-wjV77zXg1PhXeFyqRh963xgEdc_spLzZtP2m6e6734"
+    ],
+    "isActive": true
+  },
+  {
+    "title": "The Tortoise Classic",
+    "description": "Round frame made with premium Acetate material. Classic optical glasses.",
+    "brand": "Emaan Optiko",
+    "colors": "Tortoise",
+    "sizes": [],
+    "category": "Glasses",
+    "price": 225,
+    "stock": 10,
+    "images": [
+      "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcSUiKjcksHxwh-zf5ZeNlu3Mzluc9wXmQL6YkCNSmgsbCdZx2xr85XX81FuC3C37u9QN6tRdxW-fmRhmwg"
+    ],
+    "isActive": true
+  },
+  {
+    "title": "Dark Aviator",
+    "description": "Aviator frame made with Metal material. UV400 protection sunglasses.",
+    "brand": "Emaan Optiko",
+    "colors": "Matte Black",
+    "sizes": [],
+    "category": "Glasses",
+    "price": 295,
+    "stock": 10,
+    "images": [
+      "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcSZAvPN_yPWKnHjp4aZuDxTxOCfy1fQXnHd1DkMB5cnLdSq3NeHLZQMLEajch4CxZD_zEgw9eMWDQYJn8g"
+    ],
+    "isActive": true
+  },
+  {
+    "title": "The Vintage Round",
+    "description": "Round frame made with Metal material. Vintage style optical glasses.",
+    "brand": "Emaan Optiko",
+    "colors": "Gold",
+    "sizes": [],
+    "category": "Glasses",
+    "price": 210,
+    "stock": 10,
+    "images": [
+      "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcSJ4udQE3fH-TwfI5zrG5u-uBqf7mtONaGy_MqDJ6ireP7_Op2f8bNtH9AU7nCpMpg6Q_ahaDui9P6HMCM"
+    ],
+    "isActive": true
+  }
+]
