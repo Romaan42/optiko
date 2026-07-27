@@ -3,6 +3,9 @@ import Banner from '@/components/home/Banner';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
 import { Suspense } from 'react';
 import LoadingProducts from '@/components/home/Loading';
+
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   // Configured with high-quality product images
 
