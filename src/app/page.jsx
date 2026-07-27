@@ -7,7 +7,7 @@ import LoadingProducts from '@/components/home/Loading';
 export const dynamic = 'force-dynamic';
 
 export default function Home() {
-  // Configured with high-quality product images
+
 
   return (
     <>
