@@ -117,7 +117,7 @@ export default function Navbar() {
                         {/* Mobile Menu Button */}
                         <button
                             className="md:hidden p-2 hover:bg-neutral-100 rounded-full"
-                            onClick={() => dispatch(setSidebar(!isOpen))}
+                            onClick={() => setMenuOpen(!menuOpen)}
                         >
                             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                         </button>

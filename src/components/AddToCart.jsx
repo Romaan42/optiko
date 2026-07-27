@@ -45,7 +45,14 @@ export default function AddToCart({ product }) {
     return (
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 flex items-end p-4">
             <Toaster />
-            <button className="w-full py-3 bg-white text-neutral-900 font-bold rounded-xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-md hover:bg-neutral-50 cursor-pointer" onClick={handleAddToCart} disabled={cartLoading}>
+            <button
+                className="w-full py-3 bg-white text-neutral-900 font-bold rounded-xl 
+                    opacity-100 
+                    lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 
+                    transition-all duration-300 shadow-md hover:bg-neutral-50 cursor-pointer"
+                onClick={handleAddToCart}
+                disabled={cartLoading}
+            >
                 {cartLoading ? "adding..." : "Quick Add"}
             </button>
         </div>
