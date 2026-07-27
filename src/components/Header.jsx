@@ -85,7 +85,7 @@ export default function Navbar() {
                             ) : user ? (
                                 // 2. LOGGED IN STATE
                                 <div className="flex items-center gap-3">
-                                    <button className="p-2 px-5 bg-neutral-800 text-white rounded-full hover:bg-neutral-700 transition-all duration-200 font-medium">
+                                    <button className="p-2 px-5 text-[6px] md:text-xl bg-neutral-800 text-white rounded-full hover:bg-neutral-700 transition-all duration-200 font-medium">
                                         {user?.name}
                                     </button>
 
