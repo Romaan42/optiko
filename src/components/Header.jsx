@@ -5,7 +5,7 @@ import { Eye, ShoppingBag, User, Menu, X, LogOut } from "lucide-react";
 import CartSidebar from "./SideBar";
 import { useDispatch, useSelector } from "react-redux";
 import { checkUserLogin } from "@/store/userSlice";
-import { getCartItems, getGuestCartData, saveCartLocalStorage } from "@/store/cartSlice";
+import { getCartItems, getGuestCartData, saveCartLocalStorage, setCartLoading } from "@/store/cartSlice";
 import { logoutUser } from "@/actions/userActions";
 import DropdownLogin from "./LoginDropdown";
 import { setSidebar } from "@/store/cartSidebarSlice";
@@ -30,12 +30,11 @@ export default function Navbar() {
         }
 
         dispatch(getGuestCartData())
+        dispatch(setCartLoading(false))
     }
 
     useEffect(() => {
         dispatch(checkUserLogin())
-
-
     }, [])
 
     useEffect(() => {

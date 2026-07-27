@@ -6,6 +6,13 @@ import { Suspense } from 'react';
 export default async function Collections() {
     try {
         const res = await fetch(`${process.env.BASE_URL}/api/products`)
+        if (!res.ok) {
+            return (
+                <div className='min-h-screen w-full flex justify-center items-center'>
+                    <h1 className='text-red-500 font-bold'>error while loading products</h1>
+                </div>
+            )
+        }
         const result = await res.json()
 
         if (!result.success) {
