@@ -19,6 +19,11 @@ const nextConfig = {
         hostname: "encrypted-tbn1.gstatic.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+      },
     ],
   },
 };

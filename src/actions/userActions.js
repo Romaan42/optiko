@@ -43,7 +43,9 @@ export const loginUser = async (_, data) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    cookiesStore.set("userToken", token);
+    cookiesStore.set("userToken", token, {
+      maxAge: 24 * 60 * 60 * 60 * 1000,
+    });
     return {
       success: true,
       userId: user._id.toString(),

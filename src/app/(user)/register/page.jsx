@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { registerUser } from "@/actions/userActions";
 import { useRouter } from "next/navigation";
+import { Loader } from "../login/page";
 
 export default function Register() {
     const router = useRouter()
@@ -128,13 +129,15 @@ export default function Register() {
                         </div>
 
                         {/* Submit Button */}
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className={`w-full py-4 ${loading ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-900"} text-white font-bold rounded-xl text-sm transition-transform hover:scale-[1.01] active:scale-[0.99] shadow-md ${!loading ? "hover:bg-neutral-800" : ""}`}
-                        >
-                            Create Account
-                        </button>
+                        {loading ? <Loader /> :
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className={`w-full py-4 ${loading ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-900"} text-white font-bold rounded-xl text-sm transition-transform hover:scale-[1.01] active:scale-[0.99] shadow-md ${!loading ? "hover:bg-neutral-800" : ""}`}
+                            >
+                                Create Account
+                            </button>
+                        }
                     </form>
 
                     {/* Divider */}

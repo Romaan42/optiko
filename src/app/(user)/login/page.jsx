@@ -155,12 +155,16 @@ export default function Login() {
                         </div>
 
                         {/* Submit Button */}
-                        <button
-                            type="submit"
-                            className="w-full py-4 bg-neutral-900 text-white font-bold rounded-xl text-sm transition-transform hover:scale-[1.01] active:scale-[0.99] shadow-md hover:bg-neutral-800"
-                        >
-                            Sign In
-                        </button>
+                        {loading ?
+                            <Loader /> :
+
+                            <button
+                                type="submit"
+                                className="w-full py-4 bg-neutral-900 text-white font-bold rounded-xl text-sm transition-transform hover:scale-[1.01] active:scale-[0.99] shadow-md hover:bg-neutral-800"
+                            >
+                                Sign In
+                            </button>
+                        }
                     </form>
                 </div>
 
@@ -168,3 +172,13 @@ export default function Login() {
         </div>
     );
 }
+
+
+export const Loader = () => (
+    <div className="flex flex-row gap-2 justify-center">
+        <div className="w-4 h-4 rounded-full bg-neutral-800 animate-bounce" />
+        <div className="w-4 h-4 rounded-full bg-neutral-800 animate-bounce [animation-delay:-.3s]" />
+        <div className="w-4 h-4 rounded-full bg-neutral-800 animate-bounce [animation-delay:-.5s]" />
+    </div>
+);
+
