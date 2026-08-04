@@ -19,6 +19,7 @@ import {
     ArrowUpDown
 } from 'lucide-react';
 import ProductTableSkeleton from '@/components/admin/TableLoading';
+import toast from 'react-hot-toast';
 
 export default function AdminProductsPage() {
     const [products, setProducts] = useState([]);
@@ -31,13 +32,18 @@ export default function AdminProductsPage() {
     const [loading, setLoading] = useState(false)
     const itemsPerPage = 5;
 
-
-    useEffect(() => {
+    const fetchProducts = () => {
         setLoading(true)
         fetch("/api/products").then((res) => res.json()).then((result) => {
-            setProducts(result.products); setLoading(false)
+            setProducts(result.products);
+            setLoading(false)
         })
+    }
+
+    useEffect(() => {
+        fetchProducts()
     }, [])
+
 
     const filteredProducts = useMemo(() => {
         return products.filter(product => {
@@ -86,10 +92,18 @@ export default function AdminProductsPage() {
     };
 
     // Delete Single Product
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
         if (confirm('Are you sure you want to delete this product?')) {
-            setProducts(prev => prev.filter(p => p._id !== id));
-            setSelectedProductIds(prev => prev.filter(item => item !== id));
+            const res = await fetch(`/admin/api/product/${id}`, {
+                method: "DELETE",
+            })
+
+            const result = await res.json()
+            if (result.success) {
+                toast.success(result.message)
+                fetchProducts()
+            }
+
         }
     };
 

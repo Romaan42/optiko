@@ -32,7 +32,7 @@ export default function Banner() {
                     {/* Right Hero Image Frame */}
                     <div className="lg:col-span-5 relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] w-full max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl">
                         <Image
-                            src="/banner.jfif"
+                            src="https://res.cloudinary.com/druroxxha/image/upload/v1785841546/banner_xmmgcq.jpg"
                             fill
                             quality={85}
                             sizes="(max-width: 768px) 100vw, 50vw"

@@ -1,132 +1,56 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import {
     ShoppingBag,
     Search,
-    SlidersHorizontal,
     Eye,
     Truck,
     CheckCircle2,
     Clock,
-    XCircle,
     ChevronLeft,
     ChevronRight,
     X,
     Download,
-    DollarSign,
-    PackageCheck
+    DollarSign
 } from 'lucide-react';
 
-// Mock Orders Data for Optiko Eyewear
-const MOCK_ORDERS = [
-    {
-        id: 'OPT-84920',
-        customer: {
-            name: 'Sarah Jenkins',
-            email: 'sarah.j@example.com',
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80'
-        },
-        items: [
-            { name: 'Aura Round Acetate', quantity: 1, prescription: 'Single Vision' }
-        ],
-        totalAmount: 149.00,
-        paymentStatus: 'paid',
-        orderStatus: 'processing',
-        createdAt: '2026-07-28',
-        shippingMethod: 'Express Shipping'
-    },
-    {
-        id: 'OPT-84919',
-        customer: {
-            name: 'Marcus Vance',
-            email: 'marcus.v@example.com',
-            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80'
-        },
-        items: [
-            { name: 'Solstice Aviator Sun', quantity: 1, prescription: 'Non-Prescription' },
-            { name: 'Lens Cleaning Kit', quantity: 2 }
-        ],
-        totalAmount: 215.00,
-        paymentStatus: 'paid',
-        orderStatus: 'shipped',
-        createdAt: '2026-07-27',
-        shippingMethod: 'Standard Courier'
-    },
-    {
-        id: 'OPT-84918',
-        customer: {
-            name: 'Elena Rostova',
-            email: 'elena.rostova@example.com',
-            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80'
-        },
-        items: [
-            { name: 'Kuro Square Titanium', quantity: 1, prescription: 'Progressive' }
-        ],
-        totalAmount: 340.00,
-        paymentStatus: 'paid',
-        orderStatus: 'delivered',
-        createdAt: '2026-07-25',
-        shippingMethod: 'Express Shipping'
-    },
-    {
-        id: 'OPT-84917',
-        customer: {
-            name: 'David Chen',
-            email: 'd.chen@example.com',
-            avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80'
-        },
-        items: [
-            { name: 'Zenith Minimal Rimless', quantity: 1, prescription: 'Reading (+1.50)' }
-        ],
-        totalAmount: 235.00,
-        paymentStatus: 'pending',
-        orderStatus: 'pending',
-        createdAt: '2026-07-29',
-        shippingMethod: 'Standard Courier'
-    },
-    {
-        id: 'OPT-84916',
-        customer: {
-            name: 'Chloe Bennett',
-            email: 'chloe.b@example.com',
-            avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80'
-        },
-        items: [
-            { name: 'Vesper Cat-Eye Acetate', quantity: 1, prescription: 'Non-Prescription' }
-        ],
-        totalAmount: 165.00,
-        paymentStatus: 'refunded',
-        orderStatus: 'cancelled',
-        createdAt: '2026-07-24',
-        shippingMethod: 'Standard Courier'
-    }
-];
-
 export default function AdminOrdersPage() {
-    const [orders, setOrders] = useState(MOCK_ORDERS);
+    const [orders, setOrders] = useState([]);
     const [search, setSearch] = useState('');
-    const [statusFilter, setStatusFilter] = useState('all');
-    const [paymentFilter, setPaymentFilter] = useState('all');
     const [selectedOrderIds, setSelectedOrderIds] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
-    // Filter Logic
+    const getOrders = async () => {
+        try {
+            const res = await fetch("/admin/api/orders");
+            const result = await res.json();
+            setOrders(result.orders || []);
+        } catch (error) {
+            console.error("Failed to fetch orders:", error);
+            setOrders([]);
+        }
+    };
+
+    useEffect(() => {
+        getOrders();
+    }, []);
+
+    // Filter only by search term
     const filteredOrders = useMemo(() => {
+        if (!search.trim()) return orders;
+        const query = search.toLowerCase();
+
         return orders.filter(order => {
-            const matchesSearch =
-                order.id.toLowerCase().includes(search.toLowerCase()) ||
-                order.customer.name.toLowerCase().includes(search.toLowerCase()) ||
-                order.customer.email.toLowerCase().includes(search.toLowerCase());
+            const idMatch = order._id?.toLowerCase().includes(query);
+            const nameMatch = order.user?.name?.toLowerCase().includes(query);
+            const emailMatch = order.user?.email?.toLowerCase().includes(query);
 
-            const matchesStatus = statusFilter === 'all' || order.orderStatus === statusFilter;
-            const matchesPayment = paymentFilter === 'all' || order.paymentStatus === paymentFilter;
-
-            return matchesSearch && matchesStatus && matchesPayment;
+            return idMatch || nameMatch || emailMatch;
         });
-    }, [orders, search, statusFilter, paymentFilter]);
+    }, [orders, search]);
 
     // Pagination
     const totalPages = Math.ceil(filteredOrders.length / itemsPerPage) || 1;
@@ -138,10 +62,10 @@ export default function AdminOrdersPage() {
     // Metrics Summary
     const metrics = useMemo(() => {
         const total = orders.length;
-        const pending = orders.filter(o => o.orderStatus === 'pending' || o.orderStatus === 'processing').length;
+        const pending = orders.filter(o => o.orderStatus === 'pending' || o.orderStatus === 'processing' || !o.isDelivered).length;
         const totalRevenue = orders
-            .filter(o => o.paymentStatus === 'paid')
-            .reduce((sum, o) => sum + o.totalAmount, 0);
+            .filter(o => o.isPaid || o.paymentStatus === 'paid')
+            .reduce((sum, o) => sum + (o.totalPrice || o.totalAmount || 0), 0);
 
         return { total, pending, totalRevenue };
     }, [orders]);
@@ -149,7 +73,7 @@ export default function AdminOrdersPage() {
     // Checkbox selection
     const handleSelectAll = (e) => {
         if (e.target.checked) {
-            setSelectedOrderIds(paginatedOrders.map(o => o.id));
+            setSelectedOrderIds(paginatedOrders.map(o => o._id));
         } else {
             setSelectedOrderIds([]);
         }
@@ -161,7 +85,7 @@ export default function AdminOrdersPage() {
         );
     };
 
-    const isAllSelected = paginatedOrders.length > 0 && paginatedOrders.every(o => selectedOrderIds.includes(o.id));
+    const isAllSelected = paginatedOrders.length > 0 && paginatedOrders.every(o => selectedOrderIds.includes(o._id));
 
     return (
         <div className="max-w-7xl mx-auto space-y-8 pb-16">
@@ -214,51 +138,22 @@ export default function AdminOrdersPage() {
                 </div>
             </div>
 
-            {/* Controls */}
+            {/* Search Bar */}
             <div className="bg-white border border-neutral-200 rounded-xl p-4 space-y-4">
-                <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
-                    <div className="relative flex-1">
-                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
-                        <input
-                            type="text"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Search by Order ID, customer name, or email..."
-                            className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm font-medium text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 focus:bg-white transition-all"
-                        />
-                        {search && (
-                            <button onClick={() => setSearch('')} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600">
-                                <X className="w-4 h-4" />
-                            </button>
-                        )}
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-3">
-                        <SlidersHorizontal className="w-4 h-4 text-neutral-400 hidden sm:block" />
-                        <select
-                            value={statusFilter}
-                            onChange={(e) => setStatusFilter(e.target.value)}
-                            className="px-3 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-xs font-bold text-neutral-700 focus:outline-none focus:border-neutral-900 focus:bg-white transition-all"
-                        >
-                            <option value="all">Fulfillment Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="processing">Processing</option>
-                            <option value="shipped">Shipped</option>
-                            <option value="delivered">Delivered</option>
-                            <option value="cancelled">Cancelled</option>
-                        </select>
-
-                        <select
-                            value={paymentFilter}
-                            onChange={(e) => setPaymentFilter(e.target.value)}
-                            className="px-3 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-xs font-bold text-neutral-700 focus:outline-none focus:border-neutral-900 focus:bg-white transition-all"
-                        >
-                            <option value="all">Payment Status</option>
-                            <option value="paid">Paid</option>
-                            <option value="pending">Pending</option>
-                            <option value="refunded">Refunded</option>
-                        </select>
-                    </div>
+                <div className="relative w-full">
+                    <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
+                    <input
+                        type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search by Order ID, customer name, or email..."
+                        className="w-full pl-10 pr-10 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm font-medium text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 focus:bg-white transition-all"
+                    />
+                    {search && (
+                        <button onClick={() => setSearch('')} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600">
+                            <X className="w-4 h-4" />
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -289,107 +184,85 @@ export default function AdminOrdersPage() {
                         <tbody className="divide-y divide-neutral-100 text-sm">
                             {paginatedOrders.length > 0 ? (
                                 paginatedOrders.map((order) => {
-                                    const isSelected = selectedOrderIds.includes(order.id);
+                                    const isSelected = selectedOrderIds.includes(order._id);
+                                    const formattedDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : '';
 
                                     return (
-                                        <tr key={order.id} className={`hover:bg-neutral-50/80 transition-colors ${isSelected ? 'bg-neutral-50' : ''}`}>
+                                        <tr key={order._id} className={`hover:bg-neutral-50/80 transition-colors ${isSelected ? 'bg-neutral-50' : ''}`}>
                                             <td className="py-4 px-4">
                                                 <input
                                                     type="checkbox"
                                                     checked={isSelected}
-                                                    onChange={() => handleSelectOne(order.id)}
+                                                    onChange={() => handleSelectOne(order._id)}
                                                     className="rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900"
                                                 />
                                             </td>
 
                                             <td className="py-4 px-4">
-                                                <span className="font-mono font-bold text-neutral-900">{order.id}</span>
-                                                <p className="text-xs text-neutral-400">{order.createdAt}</p>
+                                                <span className="font-mono font-bold text-neutral-900">{order._id}</span>
+                                                <p className="text-xs text-neutral-400">{formattedDate}</p>
                                             </td>
 
                                             <td className="py-4 px-4">
                                                 <div className="flex items-center gap-3">
-                                                    <img src={order.customer.avatar} alt={order.customer.name} className="w-8 h-8 rounded-full object-cover" />
+                                                    <div className="w-8 h-8 rounded-full bg-neutral-200 flex items-center justify-center text-xs font-bold text-neutral-700">
+                                                        {order.user?.name ? order.user.name.charAt(0).toUpperCase() : 'U'}
+                                                    </div>
                                                     <div>
-                                                        <p className="font-bold text-neutral-900">{order.customer.name}</p>
-                                                        <p className="text-xs text-neutral-400">{order.customer.email}</p>
+                                                        <p className="font-bold text-neutral-900">{order.user?.name || 'N/A'}</p>
+                                                        <p className="text-xs text-neutral-400">{order.user?.email || ''}</p>
                                                     </div>
                                                 </div>
                                             </td>
 
                                             <td className="py-4 px-4">
                                                 <div className="space-y-0.5">
-                                                    {order.items.map((item, idx) => (
+                                                    {order.orderItems?.map((item, idx) => (
                                                         <div key={idx} className="text-xs font-semibold text-neutral-800">
-                                                            {item.name} <span className="text-neutral-400">×{item.quantity}</span>
-                                                            {item.prescription && (
-                                                                <span className="ml-1 text-[10px] bg-neutral-100 px-1.5 py-0.5 rounded text-neutral-600 font-normal">
-                                                                    {item.prescription}
-                                                                </span>
-                                                            )}
+                                                            {item.title || item.name} <span className="text-neutral-400">×{item.qty || item.quantity}</span>
                                                         </div>
                                                     ))}
                                                 </div>
                                             </td>
 
                                             <td className="py-4 px-4 font-bold text-neutral-900">
-                                                ${order.totalAmount.toFixed(2)}
+                                                ${(order.totalPrice || order.totalAmount || 0).toFixed(2)}
                                             </td>
 
                                             <td className="py-4 px-4">
-                                                {order.paymentStatus === 'paid' && (
+                                                {order.isPaid || order.paymentStatus === 'paid' ? (
                                                     <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                                         Paid
                                                     </span>
-                                                )}
-                                                {order.paymentStatus === 'pending' && (
+                                                ) : (
                                                     <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
                                                         Pending
                                                     </span>
                                                 )}
-                                                {order.paymentStatus === 'refunded' && (
-                                                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-neutral-100 text-neutral-600 border border-neutral-200">
-                                                        Refunded
-                                                    </span>
-                                                )}
                                             </td>
 
                                             <td className="py-4 px-4">
-                                                {order.orderStatus === 'delivered' && (
+                                                {order.orderStatus === 'delivered' ? (
                                                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                                         <CheckCircle2 className="w-3.5 h-3.5" />
                                                         Delivered
                                                     </span>
-                                                )}
-                                                {order.orderStatus === 'shipped' && (
+                                                ) : order.isDelivered || order.orderStatus === 'shipped' ? (
                                                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
                                                         <Truck className="w-3.5 h-3.5" />
                                                         Shipped
                                                     </span>
-                                                )}
-                                                {order.orderStatus === 'processing' && (
-                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                                                        <PackageCheck className="w-3.5 h-3.5" />
-                                                        Processing
-                                                    </span>
-                                                )}
-                                                {order.orderStatus === 'pending' && (
+                                                ) : (
                                                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-neutral-100 text-neutral-700 border border-neutral-200">
                                                         <Clock className="w-3.5 h-3.5" />
                                                         Pending
-                                                    </span>
-                                                )}
-                                                {order.orderStatus === 'cancelled' && (
-                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200">
-                                                        <XCircle className="w-3.5 h-3.5" />
-                                                        Cancelled
                                                     </span>
                                                 )}
                                             </td>
 
                                             <td className="py-4 px-4 text-right">
                                                 <Link
-                                                    href={`/admin/orders/${order.id}`}
+                                                    href={`/admin/orders/${order._id}`}
                                                     className="p-2 text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 rounded-lg inline-block transition-colors"
                                                     title="View Order Details"
                                                 >

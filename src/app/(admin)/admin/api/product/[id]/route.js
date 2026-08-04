@@ -55,7 +55,12 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  await connectDb();
-  await Product.findByIdAndDelete(params.id);
-  return NextResponse.json({ success: true });
+  const { id } = await params;
+  try {
+    await connectDb();
+    await Product.findByIdAndDelete(id);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return Response.json({ success: false, message: "server error" });
+  }
 }
