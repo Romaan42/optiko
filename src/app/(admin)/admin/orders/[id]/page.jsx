@@ -78,7 +78,7 @@ export default function AdminOrderDetailPage() {
             });
 
             if (res.ok) {
-                await getOrderDetail();
+                router.push("/admin/orders")
             }
         } catch (error) {
             console.error("Failed to update order:", error);
@@ -137,10 +137,10 @@ export default function AdminOrderDetailPage() {
                     <div className="flex items-center gap-3 flex-wrap">
                         <h1 className="text-2xl font-black text-neutral-900 font-mono">Order #{order._id}</h1>
                         <span className={`px-3 py-1 rounded-full text-xs font-bold border ${order.orderStatus === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                                order.orderStatus === 'shipped' ? 'bg-blue-50 text-blue-700 border-blue-200' :
-                                    order.orderStatus === 'processing' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                                        order.orderStatus === 'cancelled' ? 'bg-rose-50 text-rose-700 border-rose-200' :
-                                            'bg-neutral-100 text-neutral-700 border-neutral-200'
+                            order.orderStatus === 'shipped' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                                order.orderStatus === 'processing' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                                    order.orderStatus === 'cancelled' ? 'bg-rose-50 text-rose-700 border-rose-200' :
+                                        'bg-neutral-100 text-neutral-700 border-neutral-200'
                             }`}>
                             {order.orderStatus ? order.orderStatus.toUpperCase() : 'PENDING'}
                         </span>

@@ -54,15 +54,17 @@ export default function Login() {
             })
 
         } else {
-            setError(state?.message)
+            // setError(state?.message)
+            toast.error(state?.message)
         }
     }, [state])
 
-    const handleSubmit = (formData) => {
+    const handleSubmit = async (formData) => {
         const email = formData.get("email")
         const password = formData.get("password")
 
         action({ email, password })
+
     }
 
     return (

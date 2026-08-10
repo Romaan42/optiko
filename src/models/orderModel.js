@@ -34,8 +34,8 @@ const orderSchema = new mongoose.Schema(
     itemsPrice: { type: Number, required: true },
     shippingPrice: { type: Number, required: true, default: 0 },
     totalPrice: { type: Number, required: true },
-    isPaid: { type: Boolean, default: false },
-    isDelivered: { type: Boolean, default: false },
+    paymentStatus: { type: String, default: "pending" },
+    deliveryStatus: { type: String, default: "pending" },
   },
   { timestamps: true },
 );

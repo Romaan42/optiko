@@ -7,7 +7,8 @@ import {
     Package,
     ShoppingCart,
     Users,
-    Settings
+    Settings,
+    LogOut
 } from 'lucide-react';
 
 const sidebarLinks = [
@@ -15,7 +16,7 @@ const sidebarLinks = [
     { name: 'Products', href: '/admin/products', icon: Package },
     { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
     { name: 'Customers', href: '/admin/customers', icon: Users },
-    { name: 'Settings', href: '/admin/settings', icon: Settings },
+    // { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
@@ -37,8 +38,8 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                 key={link.name}
                                 href={link.href}
                                 className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-colors ${isActive
-                                        ? 'bg-neutral-900 text-white font-bold'
-                                        : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 font-medium'
+                                    ? 'bg-neutral-900 text-white font-bold'
+                                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 font-medium'
                                     }`}
                             >
                                 <Icon className="w-4.5 h-4.5" />
@@ -47,6 +48,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
                         )
                     })}
                 </nav>
+
             </aside>
 
             {/* Mobile Sidebar Overlay */}
@@ -70,8 +72,8 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                         href={link.href}
                                         onClick={() => setSidebarOpen(false)}
                                         className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-colors ${isActive
-                                                ? 'bg-neutral-900 text-white font-bold'
-                                                : 'text-neutral-600 hover:bg-neutral-100 font-medium'
+                                            ? 'bg-neutral-900 text-white font-bold'
+                                            : 'text-neutral-600 hover:bg-neutral-100 font-medium'
                                             }`}
                                     >
                                         <Icon className="w-4.5 h-4.5" />

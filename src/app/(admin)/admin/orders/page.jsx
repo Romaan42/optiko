@@ -15,18 +15,22 @@ import {
     Download,
     DollarSign
 } from 'lucide-react';
+import ProductTableSkeleton from '@/components/admin/TableLoading';
 
 export default function AdminOrdersPage() {
     const [orders, setOrders] = useState([]);
     const [search, setSearch] = useState('');
     const [selectedOrderIds, setSelectedOrderIds] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(false)
     const itemsPerPage = 5;
 
     const getOrders = async () => {
         try {
+            setLoading(true)
             const res = await fetch("/admin/api/orders");
             const result = await res.json();
+            setLoading(false)
             setOrders(result.orders || []);
         } catch (error) {
             console.error("Failed to fetch orders:", error);
@@ -62,7 +66,7 @@ export default function AdminOrdersPage() {
     // Metrics Summary
     const metrics = useMemo(() => {
         const total = orders.length;
-        const pending = orders.filter(o => o.orderStatus === 'pending' || o.orderStatus === 'processing' || !o.isDelivered).length;
+        const pending = orders.filter(o => o.deliveryStatus === 'pending').length;
         const totalRevenue = orders
             .filter(o => o.isPaid || o.paymentStatus === 'paid')
             .reduce((sum, o) => sum + (o.totalPrice || o.totalAmount || 0), 0);
@@ -84,6 +88,10 @@ export default function AdminOrdersPage() {
             prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
         );
     };
+
+    if (loading) {
+        return <ProductTableSkeleton />
+    }
 
     const isAllSelected = paginatedOrders.length > 0 && paginatedOrders.every(o => selectedOrderIds.includes(o._id));
 
@@ -230,7 +238,7 @@ export default function AdminOrdersPage() {
                                             </td>
 
                                             <td className="py-4 px-4">
-                                                {order.isPaid || order.paymentStatus === 'paid' ? (
+                                                {order.paymentStatus === 'paid' ? (
                                                     <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                                         Paid
                                                     </span>
@@ -247,10 +255,10 @@ export default function AdminOrdersPage() {
                                                         <CheckCircle2 className="w-3.5 h-3.5" />
                                                         Delivered
                                                     </span>
-                                                ) : order.isDelivered || order.orderStatus === 'shipped' ? (
+                                                ) : order.deliveryStatus !== 'pending' ? (
                                                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
                                                         <Truck className="w-3.5 h-3.5" />
-                                                        Shipped
+                                                        {order.deliveryStatus}
                                                     </span>
                                                 ) : (
                                                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-neutral-100 text-neutral-700 border border-neutral-200">

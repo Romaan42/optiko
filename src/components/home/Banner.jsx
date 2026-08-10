@@ -12,7 +12,7 @@ export default function Banner() {
                         <span className="text-xs font-bold tracking-widest uppercase text-neutral-500 mb-3 block">Autumn / Winter '26</span>
                         <h1 className="text-5xl lg:text-7xl font-black tracking-tight leading-tight mb-6">
                             Vision Without <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-500 to-neutral-900">
+                            <span className="text-transparent bg-clip-text bg-linear-to-r from-neutral-500 to-neutral-900">
                                 Compromise.
                             </span>
                         </h1>
@@ -30,7 +30,7 @@ export default function Banner() {
                     </div>
 
                     {/* Right Hero Image Frame */}
-                    <div className="lg:col-span-5 relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] w-full max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl">
+                    <div className="lg:col-span-5 relative aspect-4/5 sm:aspect-square lg:aspect-4/5 w-full max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl">
                         <Image
                             src="https://res.cloudinary.com/druroxxha/image/upload/v1785841546/banner_xmmgcq.jpg"
                             fill
@@ -40,7 +40,7 @@ export default function Banner() {
                             alt="Optiko Brand Model wearing minimalist eyeglasses"
                             className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                         <div className="absolute bottom-6 left-6 text-white">
                             <button className="text-xs font-semibold tracking-wider uppercase opacity-75">Featured Frame</button>
                             <p className="text-lg font-bold">The Horizon — Gold & Amber</p>
