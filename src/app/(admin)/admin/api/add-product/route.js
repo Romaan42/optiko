@@ -6,6 +6,7 @@ export const POST = async (request) => {
     await connectDb();
     const {
       title,
+      slug,
       description,
       price,
       comparePrice,
@@ -19,22 +20,9 @@ export const POST = async (request) => {
       images,
     } = await request.json();
 
-    console.log({
-      title,
-      description,
-      price,
-      comparePrice,
-      color,
-      stock,
-      category,
-      shape,
-      sizes,
-      status,
-      brand,
-    });
-
     await Product.create({
       title,
+      slug,
       description,
       price,
       brand,

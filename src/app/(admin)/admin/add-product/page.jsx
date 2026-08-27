@@ -17,6 +17,7 @@ export default function AddProductPage() {
     const router = useRouter()
     const [formData, setFormData] = useState({
         title: '',
+        slug: "",
         description: '',
         price: '',
         comparePrice: '',
@@ -119,6 +120,20 @@ export default function AddProductPage() {
                                 value={formData.title}
                                 onChange={handleChange}
                                 placeholder="e.g. Classic Round Acetate Frame"
+                                className="w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm font-medium text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 focus:bg-white transition-all"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-black uppercase tracking-wider text-neutral-500 mb-2">
+                                Product Slug *
+                            </label>
+                            <input
+                                type="text"
+                                name="slug"
+                                required
+                                value={formData.slug}
+                                onChange={handleChange}
+                                placeholder="e.g. best-glasses-for-you"
                                 className="w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm font-medium text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 focus:bg-white transition-all"
                             />
                         </div>

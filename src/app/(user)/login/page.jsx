@@ -14,8 +14,6 @@ export default function Login() {
     const dispatch = useDispatch()
     const { cartItems } = useSelector(state => state.cart)
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState("")
-
     const [state, action, loading] = useActionState(loginUser)
 
     const syncCartItems = async () => {
@@ -39,6 +37,7 @@ export default function Login() {
     }
 
     useEffect(() => {
+        if (loading || !state) return;
         if (state?.success && !loading) {
             if (!cartItems.length) {
                 router.push("/")
@@ -53,8 +52,10 @@ export default function Login() {
 
             })
 
-        } else {
-            // setError(state?.message)
+        }
+
+        if (!state?.success && !loading) {
+
             toast.error(state?.message)
         }
     }, [state])
@@ -156,9 +157,12 @@ export default function Login() {
                             </div>
                         </div>
 
+
+
                         {/* Submit Button */}
                         {loading ?
-                            <Loader /> :
+                            <Loader />
+                            :
 
                             <button
                                 type="submit"
@@ -167,11 +171,39 @@ export default function Login() {
                                 Sign In
                             </button>
                         }
+
+
+                        <div className="relative my-5">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-neutral-200" />
+                            </div>
+                            <div className="relative flex justify-center text-[10px] font-bold uppercase tracking-[0.22em] text-neutral-400">
+                                <span className="bg-white px-3">or</span>
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => toast("Google sign in is not configured yet.", { icon: "ℹ️" })}
+                            className="w-full flex items-center justify-center gap-3 py-3.5 bg-white border border-neutral-200 rounded-xl text-sm font-bold text-neutral-800 shadow-sm transition-all hover:border-neutral-300 hover:bg-neutral-50"
+                        >
+                            <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
+                                <path fill="#4285F4" d="M21.6 12.23c0-.73-.06-1.42-.19-2.09H12v3.96h5.39a4.6 4.6 0 0 1-2 3.02v2.5h3.24c1.9-1.75 2.97-4.33 2.97-7.39Z" />
+                                <path fill="#34A853" d="M12 22c2.7 0 4.96-.9 6.61-2.43l-3.24-2.5c-.9.6-2.05.96-3.37.96-2.59 0-4.79-1.75-5.58-4.12H.75v2.6A10 10 0 0 0 12 22Z" />
+                                <path fill="#FBBC05" d="M6.42 19.9c-.46-.86-.72-1.8-.72-2.9s.26-2.04.72-2.9V11.5H2.8A10 10 0 0 0 1.5 14c0 1.6.38 3.12 1.05 4.5l3.87-2.6Z" />
+                                <path fill="#EA4335" d="M12 5.98c1.17 0 2.22.4 3.05 1.18l2.27-2.27A9.96 9.96 0 0 0 12 2a10 10 0 0 0-10.5 7.5l3.87 2.6c.79-2.37 2.99-4.12 5.63-4.12Z" />
+                            </svg>
+                            Continue with Google
+                        </button>
+
+
                     </form>
+
+
                 </div>
 
             </div>
-        </div>
+        </div >
     );
 }
 

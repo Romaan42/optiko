@@ -36,7 +36,7 @@ export default async function FeaturedProducts() {
         )
     } catch (error) {
         return (
-            <div className='flex justify-center items-center py-10'>
+            <div className='flex justify-center items-center py-10 h-40'>
                 <h1 className='text-red-500 font-bold'>error while loading products</h1>
             </div>
         )

@@ -1,22 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import ClImage from "./ClImage";
 
 export default function ProductGallery({ images, title }) {
     const [selectedImg, setSelectedImg] = useState(0);
 
-    // Fallback if no images are provided
     if (!images || images.length === 0) return null;
 
     return (
         <div>
             <div className="relative aspect-square bg-neutral-50 rounded-2xl overflow-hidden border border-neutral-200">
-                <Image
+                <ClImage
                     src={images[selectedImg]}
                     alt={title}
                     fill
-                    className="object-cover"
+                    removeBackground
+                    className="object-contain"
                     priority
                 />
             </div>
@@ -29,11 +29,12 @@ export default function ProductGallery({ images, title }) {
                             }`}
                         aria-label={`View image ${i + 1}`}
                     >
-                        <Image
+                        <ClImage
                             src={img}
                             alt={`${title} thumbnail ${i + 1}`}
                             fill
-                            className="object-cover"
+                            removeBackground
+                            className="object-contain"
                         />
                     </button>
                 ))}

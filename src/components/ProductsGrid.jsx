@@ -1,6 +1,7 @@
 import React from 'react'
 import AddToCart from './AddToCart'
 import Link from 'next/link'
+import ClImage from './ClImage'
 
 export default function ProductsGrid({ products }) {
     return (
@@ -10,9 +11,12 @@ export default function ProductsGrid({ products }) {
                 {products.map((product) => (
                     <div key={product._id} className="group cursor-pointer">
                         <div className="relative aspect-4/3 bg-neutral-100 rounded-2xl overflow-hidden mb-4 flex items-center justify-center p-8">
-                            <img
+                            <ClImage
                                 src={product.images[0]}
                                 alt={product.title}
+                                fill
+                                quality={50}
+                                removeBackground
                                 className="max-w-full max-h-[85%] object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
                             />
 
@@ -24,7 +28,7 @@ export default function ProductsGrid({ products }) {
                                 <p className="text-xs text-neutral-500 mb-1 font-medium tracking-wider uppercase">
                                     {product.category} • {product.shape}
                                 </p>
-                                <Link href={`/product/${product._id}`} className="text-base font-bold">{product.title}</Link>
+                                <Link href={`/product/${product.slug}`} className="text-base font-bold">{product.title}</Link>
                             </div>
                             <span className="font-semibold text-neutral-950">Rs: {product.price}</span>
                         </div>
