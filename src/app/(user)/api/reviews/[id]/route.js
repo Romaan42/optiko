@@ -1,18 +1,19 @@
 import connectDb from "@/lib/db";
 import Reviews from "@/models/reviewsModel";
 
-export const GET = async (_, params) => {
+export const GET = async (_, { params }) => {
   try {
     await connectDb();
     const { id } = await params;
-    const reviews = await Reviews.find({ product: id });
+    const reviews = await Reviews.find({ product: id }).populate("user");
+
     if (!reviews) {
       return Response.json(
         { success: false, message: "reviews not found!" },
         { status: 404 },
       );
     }
-
+    console.log({ id, reviews });
     return Response.json({ success: true, reviews });
   } catch (error) {
     return Response.json(

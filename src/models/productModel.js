@@ -16,9 +16,11 @@ const ProductSchema = new mongoose.Schema(
     brand: {
       type: String,
     },
-    colors: {
-      type: String,
-    },
+    colors: [
+      {
+        type: String,
+      },
+    ],
     sizes: [
       {
         type: String,
@@ -26,7 +28,6 @@ const ProductSchema = new mongoose.Schema(
     ],
     category: {
       type: String,
-      enum: ["Glasses", "Perfume", "Watches"],
       required: true,
     },
     price: {

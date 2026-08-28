@@ -14,7 +14,7 @@ export const POST = async (request) => {
       );
     }
 
-    await Reviews.create({
+    const review = await Reviews.create({
       user: user._id,
       comment,
       product: productId,
@@ -24,6 +24,7 @@ export const POST = async (request) => {
     return Response.json({
       success: true,
       message: "review submit successfuly",
+      review,
     });
   } catch (error) {
     console.log("ERROR", error);

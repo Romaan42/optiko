@@ -2,8 +2,12 @@
 
 import { useState, useTransition } from 'react';
 import { Star } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 export default function ProductReviews({ productId, initialReviews, avgRating }) {
+    const { user, loading } = useSelector(state => state.user)
+    const router = useRouter()
     const [reviews, setReviews] = useState(initialReviews);
     const [rating, setRating] = useState(5);
     const [hoverRating, setHoverRating] = useState(0);
@@ -19,7 +23,10 @@ export default function ProductReviews({ productId, initialReviews, avgRating })
         e.preventDefault();
         setError('');
         setSuccessMessage('');
+        if (!user && !loading) {
+            return router.push("/login")
 
+        }
         if (!comment.trim() || !author.trim()) {
             setError('Please fill in all fields.');
             return;
@@ -38,7 +45,7 @@ export default function ProductReviews({ productId, initialReviews, avgRating })
                 if (!res.ok) throw new Error(data.message || 'Failed to submit review');
 
                 // Optimistically update or append the new review
-                setReviews([data.review, ...reviews]);
+                router.refresh()
                 setComment('');
                 setAuthor('');
                 setRating(5);
@@ -103,9 +110,10 @@ export default function ProductReviews({ productId, initialReviews, avgRating })
                         <label className="block text-sm font-medium text-neutral-700 mb-1">Your Name</label>
                         <input
                             type="text"
-                            value={author}
+                            value={user ? user.name : "Login first"}
                             onChange={(e) => setAuthor(e.target.value)}
                             required
+                            readOnly
                             className="w-full px-3 py-2 border rounded-md border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
                             placeholder="John Doe"
                         />
@@ -137,27 +145,57 @@ export default function ProductReviews({ productId, initialReviews, avgRating })
 
                 {/* Reviews List */}
                 <div className="space-y-4">
-                    <h4 className="text-lg font-semibold mb-4">Recent Feedback</h4>
+                    <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-lg font-bold text-neutral-900">Recent Feedback</h4>
+                        <span className="text-xs font-semibold px-2.5 py-1 bg-neutral-100 text-neutral-600 rounded-full">
+                            {reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'}
+                        </span>
+                    </div>
+
                     {reviews.length === 0 ? (
-                        <p className="text-sm text-neutral-500">No reviews yet. Be the first!</p>
+                        <div className="p-8 text-center bg-neutral-50 rounded-2xl border border-dashed border-neutral-200">
+                            <p className="text-sm text-neutral-500 font-medium">No reviews yet. Be the first to share your thoughts!</p>
+                        </div>
                     ) : (
-                        reviews.map((rev) => (
-                            <div key={rev._id} className="p-4 border border-neutral-200 rounded-xl bg-white shadow-sm">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="font-semibold text-sm">{rev?.user?.name}</span>
-                                    <div className="flex">
-                                        {[...Array(5)].map((_, i) => (
-                                            <Star
-                                                key={i}
-                                                size={14}
-                                                className={i < rev.rating ? "fill-yellow-400 text-yellow-400" : "text-neutral-200"}
-                                            />
-                                        ))}
+                        reviews.map((rev) => {
+                            const authorName = rev?.user?.name || rev?.author || 'Anonymous';
+                            const reviewDate = rev?.createdAt || rev?.date || '';
+
+                            return (
+                                <div
+                                    key={rev._id || rev.id || Math.random()}
+                                    className="p-5 border border-neutral-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+                                >
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center gap-3">
+                                            {/* Avatar Initial Placeholder */}
+                                            <div className="w-9 h-9 rounded-full bg-neutral-900 text-white font-bold text-xs flex items-center justify-center">
+                                                {authorName.charAt(0).toUpperCase()}
+                                            </div>
+                                            <div>
+                                                <span className="font-bold text-sm text-neutral-900 block">{authorName}</span>
+                                                {reviewDate && (
+                                                    <span className="text-xs text-neutral-400 font-medium">{reviewDate}</span>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Stars */}
+                                        <div className="flex gap-0.5">
+                                            {[...Array(5)].map((_, i) => (
+                                                <Star
+                                                    key={i}
+                                                    size={14}
+                                                    className={i < rev.rating ? "fill-yellow-400 text-yellow-400" : "text-neutral-200"}
+                                                />
+                                            ))}
+                                        </div>
                                     </div>
+
+                                    <p className="text-sm text-neutral-600 leading-relaxed pl-12">{rev.comment}</p>
                                 </div>
-                                <p className="text-sm text-neutral-600">{rev.comment}</p>
-                            </div>
-                        ))
+                            );
+                        })
                     )}
                 </div>
             </div>

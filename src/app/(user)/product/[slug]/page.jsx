@@ -44,7 +44,7 @@ export default async function ProductDetail({ params }) {
     const suggested = await getSuggestedProducts(product._id);
 
     // Initial mock reviews (mapped with properties expected by the reviews component)
-    const reviews = await getReviews()
+    const reviews = await getReviews(product._id)
 
     const avgRating = reviews.length > 0 ? reviews.reduce((a, b) => a + b.rating, 0) / reviews.length : 0;
 
