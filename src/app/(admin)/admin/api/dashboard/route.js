@@ -1,21 +1,20 @@
 import connectDb from "@/lib/db";
 import Order from "@/models/orderModel";
 
-export async function GET(request) {
+export async function GET() {
   try {
     await connectDb();
-    const orders = await Order.find().countDocuments();
-    const result = await Order.aggregate([
+    const orders = await Order.find();
+    const [result] = await Order.aggregate([
       {
         $group: {
+          _id: null,
           totalRevenue: { $sum: "$totalPrice" }, // totalAmount ko sum karo
         },
       },
     ]);
-
-    console.log(result);
-
-    return Response.json({ orders });
+    const revenue = result?.totalRevenue ?? 0;
+    return Response.json({ success: true, orders, revenue });
   } catch (error) {
     console.log(error);
     return Response.json(

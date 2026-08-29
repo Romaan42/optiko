@@ -29,6 +29,8 @@ export const GET = async () => {
         images: productData.images,
         brand: productData.brand,
         qty: product.qty,
+        slug: productData.slug,
+        category: productData.category,
       };
       return finalData;
     });

@@ -4,7 +4,7 @@ import Reviews from "@/models/reviewsModel";
 
 export const POST = async (request) => {
   try {
-    const { author, comment, productId, rating } = await request.json();
+    const { comment, productId, rating } = await request.json();
     await connectDb();
     const user = await checkUser();
     if (!user) {

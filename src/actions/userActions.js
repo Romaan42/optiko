@@ -86,6 +86,7 @@ export const userAddToCart = async (_, data) => {
 
     return { success: true, message: "added successfully" };
   } catch (error) {
+    console.log("ERROR", error);
     return { success: false, message: "something went wrong" };
   }
 };

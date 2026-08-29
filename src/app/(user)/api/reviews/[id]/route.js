@@ -13,7 +13,7 @@ export const GET = async (_, { params }) => {
         { status: 404 },
       );
     }
-    console.log({ id, reviews });
+
     return Response.json({ success: true, reviews });
   } catch (error) {
     return Response.json(

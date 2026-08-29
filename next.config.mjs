@@ -7,6 +7,7 @@ const nextConfig = {
         port: "",
       },
     ],
+    qualities: [100, 50, 75, 85],
   },
 };
 

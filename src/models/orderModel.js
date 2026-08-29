@@ -18,6 +18,8 @@ const orderSchema = new mongoose.Schema(
         qty: { type: Number, required: true },
         price: { type: Number, required: true },
         image: { type: String, required: true },
+        category: { type: String, required: true },
+        slug: { type: String, required: true },
       },
     ],
     shippingAddress: {
