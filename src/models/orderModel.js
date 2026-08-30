@@ -33,6 +33,8 @@ const orderSchema = new mongoose.Schema(
       required: true,
       default: "COD", // Cash on Delivery
     },
+    adminNotes: String,
+    trx: String,
     itemsPrice: { type: Number, required: true },
     shippingPrice: { type: Number, required: true, default: 0 },
     totalPrice: { type: Number, required: true },

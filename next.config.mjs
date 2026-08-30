@@ -8,6 +8,7 @@ const nextConfig = {
       },
     ],
     qualities: [100, 50, 75, 85],
+    formats: ["image/webp", "image/avif"],
   },
 };
 
