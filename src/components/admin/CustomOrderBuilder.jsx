@@ -148,7 +148,7 @@ export default function CustomOrderBuilder() {
         {/* Builder Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Left Column: Visual Canvas Sticky Preview (5/12 Columns) */}
-          <div className="lg:col-span-6 xl:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-neutral-200/80 sticky top-6 shadow-xl shadow-neutral-100/50 z-50">
+          <div className="lg:col-span-6 xl:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-neutral-200/80 sticky top-6 shadow-xl shadow-neutral-100/50 z-10">
             {/* Visual Workspace Canvas */}
             <div className="relative w-full h-64 sm:h-80 lg:h-96 rounded-2xl bg-gradient-to-b from-neutral-100 to-neutral-200/60 border border-neutral-200/60 flex items-center justify-center p-6 overflow-hidden ">
               {/* Dynamic Aura Glow */}
