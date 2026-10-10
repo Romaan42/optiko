@@ -2,4 +2,4 @@ services:
   optiko:
     build: ./
     env_file:
-      - .env.local
+      - ./.env.local
