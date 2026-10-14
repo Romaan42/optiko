@@ -1,5 +1,13 @@
 services:
   optiko:
-    build: ./
-    env_file:
-      - ./.env.local
+    build: .
+    ports: "3000:3000"
+    environment:
+      - MONGODB_URL=mongodb+srv://romaan42:Roman%404226@aihoorbuds.mqp58hw.mongodb.net/   optiko?appName=aihoorbuds
+      - JWT_SECRET="theHackerJoker"
+      - BASE_URL="http://54.206.89.226:3000"
+      - NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="druroxxha"
+      - CLOUDINARY_API_KEY="855877385297519"
+      - CLOUDINARY_API_SECRET="HnO2CgHmNwpdk3PZNXJzrrUnGeQ"
+      - ADMIN_EMAIL="romaan4244@gmail.com"
+      - ADMIN_PASSWORD="thehacker"
